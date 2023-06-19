@@ -7,7 +7,7 @@ const HomeForm = () => {
     const { user } = useAuthContext()
     const [title, setTitle] = useState('')
     const [load, setLoad] = useState('')
-    const [reps, setReps] = useState('')
+    const [files, setFiles] = useState([])
     const [error, setError] = useState(null)
     const [emptyFields, setEmptyFields] = useState([])
 
@@ -19,7 +19,7 @@ const HomeForm = () => {
             return
         }
 
-        const home = {title, load, reps}
+        const home = {title, load, files}
 
         const response = await fetch('/api/homes', {
             method: 'POST',
@@ -38,7 +38,7 @@ const HomeForm = () => {
         if (response.ok) {
             setTitle('')
             setLoad('')
-            setReps('')
+            setFiles([])
             setError(null)
             setEmptyFields([])
             console.log('new home added', json)
@@ -47,7 +47,7 @@ const HomeForm = () => {
     }
 
     return (
-        <form className="create" onSubmit={handleSubmit}>
+        <form className="create" onSubmit={handleSubmit} enctype="multipart/form-data">
             <h3>Add a New Home</h3>
 
             <label>Title:</label>
@@ -66,12 +66,12 @@ const HomeForm = () => {
                 className={emptyFields.includes('load') ? 'error' : ''}
             />
 
-            <label>Number:</label>
+            <label>File:</label>
             <input
-                type="number"
-                onChange={(e) => setReps(e.target.value)}
-                value={reps}
-                className={emptyFields.includes('reps') ? 'error' : ''}
+                type="file"
+                onChange={(e) => setFiles(Array.from(e.target.files))}
+                value={files}
+                className={emptyFields.includes('files') ? 'error' : ''}
             />
 
             <button>Add Home</button>
