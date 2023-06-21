@@ -6,7 +6,9 @@ const {
     deleteHome,
     updateHome
 } = require('../controllers/homeController')
+
 const requireAuth = require('../middleware/requireAuth')
+const fileUpload = require('../middleware/fileUpload')
 
 const router = express.Router()
 
@@ -19,7 +21,7 @@ router.get('/', getHomes)
 router.get('/:id', getHome)
 
 // POST a new Home
-router.post('/', createHome)
+router.post('/', fileUpload.single('file'), createHome)
 
 // DELETE a Home
 router.delete('/:id', deleteHome)

@@ -6,7 +6,6 @@ const HomeForm = () => {
     const { dispatch } = useHomesContext()
     const { user } = useAuthContext()
     const [title, setTitle] = useState('')
-    const [load, setLoad] = useState('')
     const [files, setFiles] = useState([])
     const [error, setError] = useState(null)
     const [emptyFields, setEmptyFields] = useState([])
@@ -19,7 +18,7 @@ const HomeForm = () => {
             return
         }
 
-        const home = {title, load, files}
+        const home = {title, files}
 
         const response = await fetch('/api/homes', {
             method: 'POST',
@@ -33,11 +32,10 @@ const HomeForm = () => {
 
         if (!response.ok) {
             setError(json.error)
-            setEmptyFields(json.emptyFields)
+            setEmptyFields(json.emptyFields || [])
         }
         if (response.ok) {
             setTitle('')
-            setLoad('')
             setFiles([])
             setError(null)
             setEmptyFields([])
@@ -58,19 +56,10 @@ const HomeForm = () => {
                 className={emptyFields.includes('title') ? 'error' : ''}
             />
 
-            <label>Number:</label>
-            <input
-                type="number"
-                onChange={(e) => setLoad(e.target.value)}
-                value={load}
-                className={emptyFields.includes('load') ? 'error' : ''}
-            />
-
             <label>File:</label>
             <input
                 type="file"
                 onChange={(e) => setFiles(Array.from(e.target.files))}
-                value={files}
                 className={emptyFields.includes('files') ? 'error' : ''}
             />
 

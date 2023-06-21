@@ -30,18 +30,18 @@ const getHome = async (req, res) => {
 // create new home
 
 const createHome = async (req, res) => {
-    const { title, load, reps } = req.body
+    console.log(req.body)
+
+    const { title, files } = req.body
+
 
     let emptyFields = []
 
     if(!title) {
         emptyFields.push('title')
     }
-    if(!load) {
-        emptyFields.push('load')
-    }
-    if(!reps) {
-        emptyFields.push('reps')
+    if(!files) {
+        emptyFields.push('files')
     }
     if(emptyFields.length > 0) {
         return res.status(400).json({ error: 'Please fill in all fields', emptyFields })
@@ -50,7 +50,7 @@ const createHome = async (req, res) => {
     // add doc to db
     try {
         const user_id = req.user._id
-        const home = await Home.create({ title, load, reps, user_id })
+        const home = await Home.create({ title, files, user_id })
         res.status(200).json(home)
     } catch (error) {
         res.status(400).json({ error: error.message })

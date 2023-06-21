@@ -7,12 +7,9 @@ const homeSchema = new Schema({
         type: String,
         required: true
     },
-    reps: {
-        type: Number,
-        required: true
-    },
-    load: {
-        type: Number,
+    files: {
+        type: String,
+        ref: 'File',
         required: true
     },
     user_id: {
